@@ -1,7 +1,8 @@
 /** Profile and role permissions overview (Settings → Roles). Owner: Person 1. */
 import { Check, Minus } from "lucide-react";
 import { PERMISSIONS, ROLES, type Permission } from "@shared/permissions";
-import { Card, CardHeader, DescriptionList, Page, PageHeader } from "@/components/ui";
+import { AccountSettings } from "@/components/shared/account-settings";
+import { Card, CardHeader, Page, PageHeader } from "@/components/ui";
 import { useSession } from "@/lib/auth";
 import { titleCase } from "@/lib/utils";
 
@@ -27,10 +28,11 @@ export function ProfilePage() {
   const { user } = useSession();
   return (
     <Page>
-      <PageHeader title="Roles & profile" description="Who you are signed in as, and what each role may do. The server enforces these rules on every request." />
-      <Card className="mb-6 p-5">
-        <DescriptionList items={[{ label: "Name", value: user?.name }, { label: "Email", value: user?.email }, { label: "Role", value: titleCase(user?.role ?? "") }]} />
-      </Card>
+      <PageHeader title="Roles & profile" description="Your account, password, and what each role may do. The server enforces these rules on every request." />
+      <p className="mb-4 text-[13px] text-muted">Signed in as {user?.email} · {titleCase(user?.role ?? "")}</p>
+      <div className="mb-6">
+        <AccountSettings />
+      </div>
       <Card>
         <CardHeader title="Role permissions" />
         <div className="overflow-x-auto">

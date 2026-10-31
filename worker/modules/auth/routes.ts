@@ -2,9 +2,9 @@
  * AUTH-1, AUTH-2: signup, login, logout, session, forgot/reset password.
  * Owner: Person 1 (core backend).
  */
-import { and, eq, gt, isNull } from "drizzle-orm";
+import { and, eq, gt, isNull, ne } from "drizzle-orm";
 import { Hono } from "hono";
-import { forgotPasswordSchema, loginSchema, resetPasswordSchema, signupSchema } from "../../../shared/schemas";
+import { changePasswordSchema, forgotPasswordSchema, loginSchema, resetPasswordSchema, signupSchema, updateAccountSchema } from "../../../shared/schemas";
 import type { AppEnv } from "../../env";
 import { currentUser, endSession, requireAuth, startSession } from "../../lib/auth";
 import { hashPassword, randomToken, sha256Hex, verifyPassword } from "../../lib/crypto";
@@ -78,6 +78,38 @@ export const authRoutes = new Hono<AppEnv>()
   })
 
   .get("/me", requireAuth, (c) => c.json({ user: currentUser(c) }))
+
+  /** Any signed-in user: change display name. */
+  .patch("/me", requireAuth, validate("json", updateAccountSchema), async (c) => {
+    const user = currentUser(c);
+    const { name } = c.req.valid("json");
+    await c.get("db").update(schema.users).set({ name, updatedAt: nowISO() }).where(eq(schema.users.id, user.id));
+    return c.json({ user: { ...user, name } });
+  })
+
+  /** Any signed-in user: change password. Other sessions are signed out; this one stays. */
+  .post(
+    "/change-password",
+    requireAuth,
+    rateLimit({ name: "change-password", limit: 10, windowSeconds: 900 }),
+    validate("json", changePasswordSchema),
+    async (c) => {
+      const user = currentUser(c);
+      const { currentPassword, newPassword } = c.req.valid("json");
+      const db = c.get("db");
+      const row = await db.select().from(schema.users).where(eq(schema.users.id, user.id)).get();
+      if (!row || !(await verifyPassword(currentPassword, row.passwordHash))) {
+        throw new ApiError("validation_failed", "Current password is incorrect.", { currentPassword: "Current password is incorrect" });
+      }
+      const sessionId = c.get("sessionId");
+      await db.batch([
+        db.update(schema.users).set({ passwordHash: await hashPassword(newPassword), updatedAt: nowISO() }).where(eq(schema.users.id, user.id)),
+        db.delete(schema.sessions).where(and(eq(schema.sessions.userId, user.id), ne(schema.sessions.id, sessionId ?? ""))),
+        auditEntry(db, { actorId: user.id, action: "password.changed", entity: "user", entityId: user.id }),
+      ]);
+      return c.json({ message: "Password updated. Other devices have been signed out." });
+    },
+  )
 
   .post(
     "/forgot-password",

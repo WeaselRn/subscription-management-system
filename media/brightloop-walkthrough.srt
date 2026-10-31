@@ -1,0 +1,144 @@
+1
+00:00:00,400 --> 00:00:05,466
+This is Brightloop: subscription management for recurring-revenue businesses.
+
+2
+00:00:05,466 --> 00:00:14,216
+Products, plans, quotations, subscriptions, invoices and payments live in one ledger, and Brightloop bills every period exactly once.
+
+3
+00:00:14,216 --> 00:00:16,979
+Let's sign in as an admin and take a tour.
+
+4
+00:00:17,967 --> 00:00:28,262
+The dashboard opens with what finance cares about first: active subscriptions, monthly and annual recurring revenue, cash collected this month, and what is still outstanding.
+
+5
+00:00:28,262 --> 00:00:31,753
+The banner flags revenue at risk from the leakage detector.
+
+6
+00:00:31,753 --> 00:00:38,261
+Below, billed versus collected over the last twelve months, and overdue invoices grouped by how late they are.
+
+7
+00:00:39,267 --> 00:00:41,695
+Everything starts with the catalog.
+
+8
+00:00:41,695 --> 00:00:46,412
+Products carry sales price, cost and margin, with optional variants.
+
+9
+00:00:46,412 --> 00:00:56,124
+Plans set the recurring price and billing frequency, plus which lifecycle actions a customer may take, such as pausing, closing or renewing.
+
+10
+00:00:57,133 --> 00:01:05,772
+Subscriptions move through a clear lifecycle: draft, quotation, confirmed, active, and closed, with pause in between.
+
+11
+00:01:05,772 --> 00:01:10,128
+A confirmed quotation becomes a subscription automatically.
+
+12
+00:01:10,128 --> 00:01:17,660
+Each subscription shows its lines, taxes, discounts, the next invoice date, and a full status history.
+
+13
+00:01:18,667 --> 00:01:23,187
+Billing runs daily on a schedule, or on demand with Run billing now.
+
+14
+00:01:23,187 --> 00:01:29,967
+It creates one invoice per subscription per period, never twice, and catches up on any missed periods.
+
+15
+00:01:29,967 --> 00:01:34,089
+Taxes and the best eligible discount are applied line by line.
+
+16
+00:01:34,089 --> 00:01:41,933
+From the invoice list you can confirm drafts in bulk, then open any invoice to send it, print it, or record a payment.
+
+17
+00:01:42,933 --> 00:01:46,647
+Payments support partial and multiple receipts per invoice.
+
+18
+00:01:46,647 --> 00:01:51,934
+A receipt that doesn't match any invoice is held as unmatched, so nothing gets lost.
+
+19
+00:01:51,934 --> 00:01:56,277
+Outstanding invoices show exactly how many days each one is past due.
+
+20
+00:01:56,277 --> 00:02:04,899
+Smart dunning then sends reminders on a schedule relative to the due date, escalates to finance, and stops the moment an invoice is paid.
+
+21
+00:02:05,900 --> 00:02:08,228
+This is where Brightloop stands out.
+
+22
+00:02:08,228 --> 00:02:25,234
+The revenue leakage detector runs deterministic checks for money the business may be losing: a billing period that was never invoiced, a payment not linked to any invoice, a subscription about to expire with no renewal, or a discount still applied after it ended.
+
+23
+00:02:25,234 --> 00:02:29,631
+Each finding has a severity, an amount at risk, and a suggested fix.
+
+24
+00:02:30,633 --> 00:02:34,595
+Customer health scores every account out of one hundred.
+
+25
+00:02:34,595 --> 00:02:44,996
+Late payments, overdue invoices, pauses and cancellation requests subtract points, and the reason is always shown, along with the next best action.
+
+26
+00:02:44,996 --> 00:02:51,717
+Open any customer for a three-sixty view: one timeline of quotes, invoices, payments and notes.
+
+27
+00:02:52,733 --> 00:03:00,113
+Renewals lists subscriptions approaching expiry, so the team can prepare a renewal quote before anything silently lapses.
+
+28
+00:03:00,113 --> 00:03:08,894
+And when a customer asks to cancel, the retention flow records the reason and offers a fair alternative, without ever blocking the cancellation.
+
+29
+00:03:09,900 --> 00:03:16,785
+The what-if simulator lets you test pricing, churn, downgrades, discounts and collection rates before you commit.
+
+30
+00:03:16,785 --> 00:03:25,132
+Raise prices by ten percent with some churn, and projected recurring revenue updates instantly, with every step of the maths shown below.
+
+31
+00:03:26,133 --> 00:03:32,398
+The finance copilot answers plain-English questions, like which customers are at risk and why.
+
+32
+00:03:32,398 --> 00:03:37,929
+Every figure comes straight from the database, and it works even without an AI key.
+
+33
+00:03:38,933 --> 00:03:40,937
+Customers get their own portal.
+
+34
+00:03:40,937 --> 00:03:51,472
+They can review and accept quotes, pause, resume, renew or cancel their subscriptions, and see every invoice and payment, so the finance team answers fewer emails.
+
+35
+00:03:52,467 --> 00:03:57,615
+That's Brightloop: recurring revenue, billed right, every period, exactly once.
+
+36
+00:03:57,615 --> 00:04:00,222
+And it runs on the Cloudflare free plan.
+

@@ -4,6 +4,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { ArrowRight, CreditCard, FileText, Printer, Repeat } from "lucide-react";
 import type { Invoice, Payment, Subscription } from "@shared/types";
+import { AccountSettings } from "@/components/shared/account-settings";
 import { InvoiceDocument, type InvoiceDetail } from "@/components/shared/invoice-document";
 import {
   Alert,
@@ -124,6 +125,13 @@ export function PortalSubscriptionDetailPage() {
   const { id } = useParams();
   const [action, setAction] = useState<"pause" | "resume" | "renew" | "accept" | null>(null);
   const [cancelling, setCancelling] = useState(false);
+  const [declining, setDeclining] = useState(false);
+  const [declineReason, setDeclineReason] = useState("");
+  const decline = useAction(() => api.post<{ data: Subscription }>(`/portal/subscriptions/${id}/decline`, { reason: declineReason || null }), {
+    success: "Quotation declined",
+    invalidate: [["portal"]],
+    onSuccess: () => setDeclining(false),
+  });
   const sub = useQuery({ queryKey: ["portal", "subscriptions", id], queryFn: () => api.get<{ data: PortalSubDetail }>(`/portal/subscriptions/${id}`).then((r) => r.data) });
   const act = useAction((a: string) => api.post<{ data: Subscription }>(`/portal/subscriptions/${id}/${a}`), {
     success: (r) => (action === "renew" ? `Renewal quotation ${r.data.number} requested` : "Done"),
@@ -143,6 +151,7 @@ export function PortalSubscriptionDetailPage() {
         description={<StatusBadge status={s.quoteExpired ? "expired" : s.status} />}
         actions={
           <>
+            {s.status === "quotation" && <Button variant="secondary" onClick={() => setDeclining(true)}>Decline</Button>}
             {s.status === "quotation" && !s.quoteExpired && <Button onClick={() => setAction("accept")}>Accept quotation</Button>}
             {s.status === "active" && s.plan.pausable && <Button variant="secondary" onClick={() => setAction("pause")}>Pause</Button>}
             {s.status === "paused" && <Button onClick={() => setAction("resume")}>Resume</Button>}
@@ -202,6 +211,24 @@ export function PortalSubscriptionDetailPage() {
         }
         confirmLabel={action ? titleCase(action === "accept" ? "accept" : action) : ""}
       />
+      {declining && (
+        <Dialog
+          open
+          onClose={() => setDeclining(false)}
+          title="Decline this quotation?"
+          description="We'll let the team know. You can ask for a new quotation any time."
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setDeclining(false)}>Back</Button>
+              <Button variant="danger" onClick={() => decline.mutate(undefined)} loading={decline.isPending}>Decline quotation</Button>
+            </>
+          }
+        >
+          <Field label="Reason (optional)" htmlFor="decline-reason">
+            <Textarea id="decline-reason" value={declineReason} onChange={(e) => setDeclineReason(e.target.value)} />
+          </Field>
+        </Dialog>
+      )}
       {cancelling && <CancellationFlow subscriptionId={s.id} onClose={() => setCancelling(false)} />}
     </Page>
   );
@@ -382,6 +409,9 @@ function ProfileForm({ initial }: { initial: { contactName: string; email: strin
         <Field label="Tax ID (GSTIN)" htmlFor="pp-tax"><Input id="pp-tax" value={v.taxId} onChange={(e) => setV({ ...v, taxId: e.target.value })} /></Field>
         <Button onClick={() => save.mutate(undefined)} loading={save.isPending}>Save profile</Button>
       </Card>
+      <div className="mt-6">
+        <AccountSettings showName={false} />
+      </div>
     </Page>
   );
 }

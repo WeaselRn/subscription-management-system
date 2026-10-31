@@ -9,6 +9,7 @@ import { can } from "@shared/permissions";
 import type { NavGroup } from "@/app/navigation";
 import { useAuthActions, useSession } from "@/lib/auth";
 import { cn, initials, titleCase } from "@/lib/utils";
+import { NotificationBell } from "@/modules/notifications/pages";
 
 export function AppShell({ nav, portal }: { nav: NavGroup[]; portal?: boolean }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -165,6 +166,9 @@ function Topbar({ nav, portal, onMenu }: { nav: NavGroup[]; portal?: boolean; on
       </button>
       <div className="text-[13px] font-medium text-ink">{current?.label ?? (portal ? "Portal" : "Brightloop")}</div>
       {!portal && <GlobalSearch />}
+      <div className={cn(portal && "ml-auto")}>
+        <NotificationBell portal={portal} />
+      </div>
     </header>
   );
 }

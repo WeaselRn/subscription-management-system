@@ -1,0 +1,54 @@
+[
+  {
+    "id": "01-intro",
+    "text": "This is Brightloop: subscription management for recurring-revenue businesses. Products, plans, quotations, subscriptions, invoices and payments live in one ledger, and Brightloop bills every period exactly once. Let's sign in as an admin and take a tour."
+  },
+  {
+    "id": "02-dashboard",
+    "text": "The dashboard opens with what finance cares about first: active subscriptions, monthly and annual recurring revenue, cash collected this month, and what is still outstanding. The banner flags revenue at risk from the leakage detector. Below, billed versus collected over the last twelve months, and overdue invoices grouped by how late they are."
+  },
+  {
+    "id": "03-catalog",
+    "text": "Everything starts with the catalog. Products carry sales price, cost and margin, with optional variants. Plans set the recurring price and billing frequency, plus which lifecycle actions a customer may take, such as pausing, closing or renewing."
+  },
+  {
+    "id": "04-subscriptions",
+    "text": "Subscriptions move through a clear lifecycle: draft, quotation, confirmed, active, and closed, with pause in between. A confirmed quotation becomes a subscription automatically. Each subscription shows its lines, taxes, discounts, the next invoice date, and a full status history."
+  },
+  {
+    "id": "05-billing",
+    "text": "Billing runs daily on a schedule, or on demand with Run billing now. It creates one invoice per subscription per period, never twice, and catches up on any missed periods. Taxes and the best eligible discount are applied line by line. From the invoice list you can confirm drafts in bulk, then open any invoice to send it, print it, or record a payment."
+  },
+  {
+    "id": "06-payments",
+    "text": "Payments support partial and multiple receipts per invoice. A receipt that doesn't match any invoice is held as unmatched, so nothing gets lost. Outstanding invoices show exactly how many days each one is past due. Smart dunning then sends reminders on a schedule relative to the due date, escalates to finance, and stops the moment an invoice is paid."
+  },
+  {
+    "id": "07-leakage",
+    "text": "This is where Brightloop stands out. The revenue leakage detector runs deterministic checks for money the business may be losing: a billing period that was never invoiced, a payment not linked to any invoice, a subscription about to expire with no renewal, or a discount still applied after it ended. Each finding has a severity, an amount at risk, and a suggested fix."
+  },
+  {
+    "id": "08-health",
+    "text": "Customer health scores every account out of one hundred. Late payments, overdue invoices, pauses and cancellation requests subtract points, and the reason is always shown, along with the next best action. Open any customer for a three-sixty view: one timeline of quotes, invoices, payments and notes."
+  },
+  {
+    "id": "09-renewals",
+    "text": "Renewals lists subscriptions approaching expiry, so the team can prepare a renewal quote before anything silently lapses. And when a customer asks to cancel, the retention flow records the reason and offers a fair alternative, without ever blocking the cancellation."
+  },
+  {
+    "id": "10-simulator",
+    "text": "The what-if simulator lets you test pricing, churn, downgrades, discounts and collection rates before you commit. Raise prices by ten percent with some churn, and projected recurring revenue updates instantly, with every step of the maths shown below."
+  },
+  {
+    "id": "11-copilot",
+    "text": "The finance copilot answers plain-English questions, like which customers are at risk and why. Every figure comes straight from the database, and it works even without an AI key."
+  },
+  {
+    "id": "12-portal",
+    "text": "Customers get their own portal. They can review and accept quotes, pause, resume, renew or cancel their subscriptions, and see every invoice and payment, so the finance team answers fewer emails."
+  },
+  {
+    "id": "13-outro",
+    "text": "That's Brightloop: recurring revenue, billed right, every period, exactly once. And it runs on the Cloudflare free plan."
+  }
+]

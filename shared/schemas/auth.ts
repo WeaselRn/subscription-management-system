@@ -38,3 +38,14 @@ export const updateStaffSchema = z.object({
   role: z.enum(["admin", "staff"]).optional(),
 });
 export type UpdateStaffInput = z.infer<typeof updateStaffSchema>;
+
+export const changePasswordSchema = z
+  .object({
+    currentPassword: z.string().min(1, "Required").max(128),
+    newPassword: passwordSchema,
+  })
+  .refine((v) => v.currentPassword !== v.newPassword, { path: ["newPassword"], message: "Choose a password different from the current one" });
+export type ChangePasswordInput = z.infer<typeof changePasswordSchema>;
+
+export const updateAccountSchema = z.object({ name: nameSchema });
+export type UpdateAccountInput = z.infer<typeof updateAccountSchema>;

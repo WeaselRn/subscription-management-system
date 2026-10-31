@@ -5,6 +5,7 @@
  */
 import {
   AlertOctagon,
+  Bell,
   BarChart3,
   BellRing,
   Boxes,
@@ -121,6 +122,7 @@ export const STAFF_NAV: NavGroup[] = [
   {
     label: "Settings",
     items: [
+      { label: "Notifications", to: "/notifications", icon: Bell, owner: P1 },
       { label: "Staff", to: "/settings/staff", icon: ShieldCheck, owner: P1, permission: "staff:manage" },
       { label: "Roles & profile", to: "/settings/profile", icon: Settings, owner: P1 },
     ],
@@ -135,6 +137,7 @@ export const PORTAL_NAV: NavGroup[] = [
       { label: "My subscriptions", to: "/portal/subscriptions", icon: Repeat, owner: P4 },
       { label: "My invoices", to: "/portal/invoices", icon: FileText, owner: P4 },
       { label: "My payments", to: "/portal/payments", icon: CreditCard, owner: P4 },
+      { label: "Notifications", to: "/portal/notifications", icon: Bell, owner: P1 },
       { label: "Profile", to: "/portal/profile", icon: User, owner: P4 },
     ],
   },

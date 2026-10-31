@@ -3,7 +3,7 @@
  * Every query filters by ownCustomerId(c) from the session — never by an id from the
  * request — so customers can only see their own records.
  */
-import { and, count, desc, eq, inArray } from "drizzle-orm";
+import { and, count, desc, eq, inArray, ne } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
 import { listQuerySchema } from "../../../shared/api";
@@ -16,6 +16,7 @@ import { nowISO, schema } from "../../lib/db";
 import { toCustomer, toInvoice, toPayment, toSubscription } from "../../lib/dto";
 import { ApiError } from "../../lib/errors";
 import { pageOffset, paginated } from "../../lib/pagination";
+import { notifyInApp } from "../../lib/notifications";
 import { first } from "../../lib/sql";
 import { validate } from "../../lib/validate";
 import { getInvoiceDetail } from "../billing/service";
@@ -23,7 +24,7 @@ import { invoiceListSchema, invoiceWhere } from "../invoices/routes";
 import { cancellationRequestSchema, requestCancellation, resolveCancellation, resolveSchema } from "../retention/service";
 import { createRenewalQuotation, getSubscription, transitionSubscription } from "../subscriptions/service";
 
-const { subscriptions, plans, invoices, payments, customers } = schema;
+const { subscriptions, plans, invoices, payments, customers, users } = schema;
 
 async function ownSubscription(c: Parameters<typeof ownCustomerId>[0], id: string) {
   const sub = await c.get("db").select().from(subscriptions).where(and(eq(subscriptions.id, id), eq(subscriptions.customerId, ownCustomerId(c)))).get();
@@ -112,6 +113,20 @@ export const portalRoutes = new Hono<AppEnv>()
     const sub = await ownSubscription(c, c.req.param("id"));
     if (sub.status !== "quotation") throw new ApiError("invalid_transition", "Only open quotations can be accepted.");
     return c.json({ data: await transitionSubscription(c.get("db"), sub.id, "confirmed", currentUser(c).id, "Accepted by customer") });
+  })
+
+  /** Decline a quotation; it is closed with the customer's reason. */
+  .post("/subscriptions/:id/decline", validate("json", z.object({ reason: z.string().trim().max(500).optional().nullable() })), async (c) => {
+    const sub = await ownSubscription(c, c.req.param("id"));
+    if (sub.status !== "quotation") throw new ApiError("invalid_transition", "Only open quotations can be declined.");
+    const { reason } = c.req.valid("json");
+    const db = c.get("db");
+    const data = await transitionSubscription(db, sub.id, "closed", currentUser(c).id, `Quotation declined by customer${reason ? `: ${reason}` : ""}`);
+    const staff = await db.select({ id: users.id, email: users.email }).from(users).where(and(ne(users.role, "customer"), eq(users.isActive, true)));
+    for (const s of staff) {
+      await notifyInApp(db, { userId: s.id, recipient: s.email, subject: `Quotation ${sub.number} declined`, body: reason || "No reason given.", entity: "subscription", entityId: sub.id });
+    }
+    return c.json({ data });
   })
 
   .post("/subscriptions/:id/renew", async (c) => {

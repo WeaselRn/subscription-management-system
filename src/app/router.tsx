@@ -29,6 +29,7 @@ const billing = () => import("@/modules/billing/pages");
 const copilot = () => import("@/modules/copilot/pages");
 const staff = () => import("@/modules/staff/staff-page");
 const profile = () => import("@/modules/staff/profile-page");
+const notifications = () => import("@/modules/notifications/pages");
 // Person 2
 const products = () => import("@/modules/products/pages");
 const plans = () => import("@/modules/plans/pages");
@@ -95,6 +96,7 @@ export const router = createBrowserRouter([
       { path: "/copilot", element: guard("ai:use", page(copilot, "CopilotPage")) },
       { path: "/settings/staff", element: guard("staff:manage", page(staff, "StaffPage")) },
       { path: "/settings/profile", element: page(profile, "ProfilePage") },
+      { path: "/notifications", element: page(notifications, "NotificationsPage") },
       // Person 2 — catalog & sales
       { path: "/products", element: page(products, "ProductsPage") },
       { path: "/products/variants", element: page(products, "VariantsPage") },
@@ -139,6 +141,7 @@ export const router = createBrowserRouter([
       { path: "invoices/:id", element: page(portal, "PortalInvoiceDetailPage") },
       { path: "payments", element: page(portal, "PortalPaymentsPage") },
       { path: "profile", element: page(portal, "PortalProfilePage") },
+      { path: "notifications", element: page(notifications, "NotificationsPage") },
       { path: "*", element: <NotFound /> },
     ],
   },
